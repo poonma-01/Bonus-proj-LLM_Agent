@@ -1,171 +1,134 @@
-# 🌐 LLM Agent [AgentFlow MindForge](https://tds-bonus-project-llm-agent.vercel.app/) — Browser-Based Multi-Tool Reasoning
+# ⚡ MindForge AgentFlow — Browser-Based LLM Agent POC
 
-This project is a **proof-of-concept (POC)** for building a **browser-based LLM agent** that can combine **natural language reasoning** with **external tools** like search engines, pipelined APIs, and even **live JavaScript execution**.
+This project is a **lightweight proof-of-concept** for experimenting with **LLM agents directly in the browser**. It demonstrates how an AI model can combine **reasoning with external tools** like search engines, API workflows, and even live JavaScript execution — all inside a simple front‑end.
 
-Modern LLM agents aren’t limited to text — they dynamically integrate multiple tools and loop until tasks are solved. This app demonstrates that idea with a **minimal, hackable UI + JavaScript agent core**.
-
----
-
-## 🚀 Features
-
-✅ **Multi-Provider Model Picker**
-
-* Choose between **AI Pipe Proxy API** (default), OpenAI GPT, Gemini, Claude, and others.
-* Dynamic dropdown for switching providers & models.
-
-✅ **Reasoning Loop Agent**
-
-* Takes user input, queries the LLM, and loops with tool calls until the task is done.
-* Uses **OpenAI-style tool/function calls** for tool invocation.
-
-✅ **Supported Tools**
-
-* 🔎 **Google Search Snippets** – Fetch relevant web info.
-* 🔗 **AI Pipe Proxy API** – Flexible AI workflows & pipelines.
-* ⚡ **JavaScript Sandbox** – Execute JS code securely inside the browser.
-
-✅ **Robust UI/UX**
-
-* Bootstrap-based clean design.
-* Streaming-style chat window with file upload.
-* Graceful error handling via **bootstrap alerts**.
-* Performance monitor & tool action logging for debugging.
+Unlike static chatbots, MindForge aims to show how an LLM can **think, plan, and act** in a loop until a task is solved.
 
 ---
 
-## 📋 Project Overview
+## ✨ Key Highlights
 
-### Goal
+🔹 **Switch Between Models**
+Pick your preferred provider: AI Pipe API (default), OpenAI GPT, Gemini, Claude, or others.
+The dropdown lets you switch models on the fly.
 
-Build a minimal JavaScript-based agent that can:
+🔹 **Agent Loop Logic**
 
-1. Accept user input in the browser.
-2. Query an LLM for reasoning.
-3. Dynamically trigger **tool calls** (search, AI workflows, code execution).
-4. Loop until the LLM decides no more tools are needed.
+* Takes your query, reasons using an LLM, and decides if a tool is needed.
+* Calls tools like search/AI workflows/JS executor.
+* Continues until a final response is ready.
 
-### Agent Logic (Conceptual)
+🔹 **Built-in Tools**
+
+* 🔍 Google Search snippet fetcher.
+* 🔗 AI Pipe workflow integration.
+* ⚙️ JavaScript sandbox for running code safely in‑browser.
+
+🔹 **Polished Browser UI**
+
+* Clean Bootstrap-based design.
+* Real-time chat interface with error alerts.
+* Logs tool actions + response times for debugging.
+
+---
+
+## 🧩 How It Works
+
+### High-Level Flow
 
 ```python
-def loop(llm):
-    msg = [user_input()]
+def run_agent(user_message):
+    history = [user_message]
     while True:
-        output, tool_calls = llm(msg, tools)
-        print("Agent: ", output)
+        reply, tool_calls = LLM(history, tools)
+        print("Agent:", reply)
         if tool_calls:
-            msg += [handle_tool_call(tc) for tc in tool_calls]
+            history += [use_tool(tc) for tc in tool_calls]
         else:
-            msg.append(user_input())
+            break
 ```
 
-### JavaScript Implementation
-
-This POC reimplements the above loop in **browser JavaScript**, connected to provider APIs.
+The JavaScript version mirrors this loop, wired to provider APIs.
 
 ---
 
-## 🛠️ Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
+### Requirements
 
 * A modern browser (Chrome/Edge/Firefox).
-* API keys for:
+* (Optional) API keys if you want live connections:
 
-  * [AI Pipe](https://aipipe.org/) proxy API (recommended)
-  * Optional: OpenAI, Gemini, or other providers.
+  * [AI Pipe](https://aipipe.org/) proxy API key
+  * Or OpenAI / Gemini / Anthropic keys
 
-### Setup
+### Run Locally
 
-1. Clone this repo:
+1. Clone the repo:
 
    ```bash
-   git clone https://github.com/23f1000805/tds-bonus-project-LLM-Agent.git
-   cd tds-bonus-project-LLM-Agent
+   git clone https://github.com/<your-username>/mindforge-agentflow.git
+   cd mindforge-agentflow
+   ```
+2. Open `index.html` directly in your browser, or serve with:
+
+   ```bash
+   python -m http.server 8000
    ```
 
-2. Open `index.html` in your browser.
-   *(No backend server required — everything runs client-side!)*
-
-3. Configure your API key in the **Settings Panel** inside the app.
+   Visit [http://localhost:8000](http://localhost:8000).
+3. Add your API key in the in‑app Settings panel.
 
 ---
 
-## 🎨 UI & Code Requirements
+## 🖥️ Example Use
 
-* **Model Picker:** Dropdown built with `bootstrap-llm-provider`.
-* **Agent Loop:** JavaScript event-driven loop for LLM ↔ Tool calls.
-* **Error UI:** All errors shown via `bootstrap-alert`.
-* **Minimalism First:** Codebase is intentionally simple, hackable, and extendable.
+**User:** "Write me a blog outline on IBM."
 
----
+**Agent:** "Searching IBM..." → *(runs Google search tool)*
 
-## 📖 Example Conversation
+**Agent:** "IBM is a global company founded in 1911... Would you like me to draft an outline?"
 
-**User:** Interview me to create a blog post.
-**Agent:** Sure! What’s the post about?
+**User:** "Yes."
 
-**User:** About IBM.
-**Agent:** Let me search for IBM.
-→ *calls `search("IBM")`*
-
-**Agent:** IBM is a global tech company founded in 1911...
-
-**User:** Next step, please.
-**Agent:** Let’s draft an outline for your blog post...
+**Agent:** *Creates blog outline step by step.*
 
 ---
 
-## 🧪 Deliverable
+## 🎯 Evaluation Metrics
 
-* A **browser JS app** with:
-
-  * LLM chat window
-  * Google Search snippets
-  * AI Pipe proxy integration
-  * JS code execution sandbox
-
-* Uses **OpenAI-style function calling**.
-
-* Handles errors gracefully.
-
-* Easy to extend for more tools.
+| Aspect                   | Marks |
+| ------------------------ | ----- |
+| Working functionality    | 1.0   |
+| Code clarity & structure | 0.5   |
+| UI polish & extras       | 0.5   |
+| **Total**                | 2.0   |
 
 ---
 
-## ✅ Evaluation Criteria
-
-| Criteria               | Marks   |
-| ---------------------- | ------- |
-| Output functionality   | **1.0** |
-| Code quality & clarity | **0.5** |
-| UI/UX polish & extras  | **0.5** |
-| **Total**              | **2.0** |
-
----
-
-## 📂 Project Structure
+## 📂 Repo Layout
 
 ```
-├── index.html   # Frontend UI (chat + settings)
-├── agent.js     # Core agent loop, providers, and tools
-├── styles.css   # CSS file
-└── README.md    # Documentation (this file)
+├── index.html   # Main UI
+├── agent.js     # Core agent + providers + tools
+├── styles.css   # Custom styling
+└── README.md    # Docs
 ```
 
 ---
 
-## 🙌 Acknowledgements
+## 🙏 Credits
 
-* [AI Pipe](https://aipipe.org/) for proxy API workflows
-* OpenAI/Anthropic/Google for LLM providers
-* Bootstrap for UI components
+* AI Pipe for workflow API
+* OpenAI / Anthropic / Google for LLM APIs
+* Bootstrap for quick styling
 
 ---
 
-🔮 **Next Steps**
+🔮 **Future Directions**
 
-* Add **conversation persistence** with IndexedDB/localStorage.
-* Enable **streaming token-by-token responses**.
-* Expand tools: file parsing, charting, SQL, etc.
+* Save conversation history in browser storage.
+* Support streaming responses.
+* Add more tools (charts, file parsing, SQL queries).
 
 ---
